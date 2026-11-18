@@ -1,0 +1,15 @@
+name: 盘前场景
+scene_id: pre_market
+description: "隔夜外盘复盘、财经早报、政策速览、当日机会预判"
+# 编排：仅组合组件层 Skill，不含业务逻辑；同 parallel_group 并行，不同组串行。
+steps:
+  - skill_id: policy_interpret
+    parallel_group: 0
+    params: {}
+  - skill_id: macro_analysis
+    parallel_group: 0
+    params: {}
+  - skill_id: market_hotspot
+    parallel_group: 0
+    params: {}
+

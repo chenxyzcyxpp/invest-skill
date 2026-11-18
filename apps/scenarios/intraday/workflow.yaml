@@ -1,0 +1,12 @@
+name: 盘中场景
+scene_id: intraday
+description: "异动监控、行情解读、资金流向、实时事件推送"
+# 编排：仅组合组件层 Skill，不含业务逻辑；同 parallel_group 并行，不同组串行。
+steps:
+  - skill_id: sentiment_risk_warning
+    parallel_group: 0
+    params: {}
+  - skill_id: market_hotspot
+    parallel_group: 0
+    params: {}
+

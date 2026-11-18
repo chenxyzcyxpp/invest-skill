@@ -1,0 +1,74 @@
+skill_id: overnight_review
+skill_name: 隔夜外围市场复盘
+category: market_review
+author: 周周、姜青、Warwick
+version: "1.4.3"
+spec: SKILL.md
+description: "生成面向A股盘前/盘中/盘后复核的隔夜外围市场复盘，覆盖全球市场行情、风格与宽度、隔夜驱动、跨资产验证、A股主线映射、机构分歧与重点公司验证；以Bloomberg「今日五件事」为决策层（事实→含义→A股传导→验证/失效），含常驻决策时间线与情景推演；输出Markdown/自包含HTML双格式"
+
+# 形态说明：本 Skill 为「提示词驱动型」（SKILL.md 提示词 + scripts 辅助 HTML 渲染/溯源规范化）。
+# 取数经三个已连接 MCP（东方财富妙想 mx-ds-mcp / 腾讯自选股 westock-mcp / 通达信 tdx-connector），
+# 不经由本项目可降级数据网关 ctx.gateway（calls_gateway=false，语义为"不经网关"，非"不取数"），属已知缺口。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md 提示词 + 辅助 scripts，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: llm_prompt            # llm_prompt | script_based | base_skill（当前为 llm_prompt）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: review_date
+    type: string
+    required: false
+    description: "复盘基准日（已完成的海外交易日）；未指定默认最近一个海外交易日"
+  - name: session
+    type: string
+    required: false
+    description: "生成时点措辞：盘前 / 盘中 / 盘后（由生成时点自动切换）"
+  - name: focus
+    type: string
+    required: false
+    description: "关注侧重：全球行情 / 今日五件事 / 主线分歧 / 决策时间线，默认全量"
+  - name: enable_company_verify
+    type: bool
+    required: false
+    description: "重点公司验证模块开关，默认 false（关闭）"
+  - name: output_format
+    type: string
+    required: false
+    description: "输出格式：markdown / html / both（默认 both）"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "files/report/隔夜外围市场复盘_定制版_{YYYYMMDD}.md"
+  - name: report_html
+    type: file
+    description: "files/report/隔夜外围市场复盘_定制版_{YYYYMMDD}.html（自包含，图表内嵌 data URI）"
+  - name: data
+    type: object
+    description: "结构化结果：全球行情速览/今日五件事/主线与分歧/决策时间线，全部带溯源角标"
+
+# 数据采集可降级方案（契约层声明；执行细则见 references/data-sources.md）
+data_sources:
+  - level: 1
+    name: 东方财富妙想 MCP (mx-ds-mcp)
+    role: 主源（全球/港美股/宏观/商品/新闻/研报/公告）
+    requires: "已连接的 mx-ds-mcp"
+    coverage: "全球指数/风格宽度、港美股、宏观与商品量价、财经新闻、研报评级、公司公告"
+  - level: 2
+    name: 腾讯自选股 MCP (westock-mcp)
+    role: A股盘中验证主源
+    requires: "已连接的 westock-mcp"
+    coverage: "A股指数/板块/个股行情、资金流、筹码、技术、新闻/公告/研报"
+  - level: 3
+    name: 通达信 MCP (tdx-connector)
+    role: A股/港股深度补充
+    requires: "已连接的 tdx-connector"
+    coverage: "A股/港股/期货行情、K线、技术指标、F10深度资料、板块行业、研报一致预期"
+  - level: 4
+    name: Web 搜索
+    role: 主通道不足时回退
+    requires: "可访问公开网页"
+    coverage: "事件/机构观点补充；禁止用于伪造精确行情"
+degradation_rule: "mx-ds-mcp → westock-mcp/tdx-connector（同生态补充）→ Web 搜索；数据缺失须说明缺失项及对结论影响，不得用训练知识补精确事实"
+no_fabrication: true

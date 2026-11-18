@@ -1,0 +1,12 @@
+name: 尾盘场景
+scene_id: closing
+description: "收盘复盘、市场强弱统计、尾盘机会扫描"
+# 编排：仅组合组件层 Skill，不含业务逻辑；同 parallel_group 并行，不同组串行。
+steps:
+  - skill_id: market_daily_review
+    parallel_group: 0
+    params: {}
+  - skill_id: industry_brief
+    parallel_group: 0
+    params: {}
+

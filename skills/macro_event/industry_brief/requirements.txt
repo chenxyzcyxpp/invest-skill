@@ -1,0 +1,14 @@
+# 行业速报 Skill 运行依赖
+# =============================================================
+# scripts/industry_flash.py 在真实模式下才会 import akshare（运行时 lazy 加载），
+# 其余均为 Python 标准库（argparse / datetime / json / os / sys / time /
+# dataclasses / typing / collections / math / re / html）。
+#
+# 零依赖即可运行的部分：
+#   --demo 演示模式：不需要任何第三方库，开箱即跑（用内置演示数据验证管线）。
+#
+# 真实模式（直连市场数据）需安装：
+akshare>=1.11.0        # 行业板块行情 / 资金流 / 5日动量 / 指数（经 akshare 取同花顺/新浪口径）
+
+# 说明：akshare 安装时会自动带入 pandas / numpy 等，无需单独声明。
+# 如需严格申万一级 31 行业口径，可后续接入 Tushare（需 TUSHARE_TOKEN 环境变量）。

@@ -1,0 +1,35 @@
+skill_id: macro_analysis
+skill_name: 宏观经济分析
+category: macro_event
+author: 姜青
+version: 1.0.0              # 资产包版本；SKILL.md frontmatter 内为 1.0.0
+spec: SKILL.md
+description: "基于经济增长/流动性/通胀/外部/就业五维度框架，将宏观变量映射到 A 股行业景气与风格轮动，结合实时宏观数据产出《宏观—权益投资分析报告》（大势判断、仓位、风格主线、行业超低配表）。"
+
+# 重要：本 Skill 是「脚本 + MCP 实时源驱动型」（SKILL.md 提示词 + scripts/macro_snapshot.py）。
+# 取数优先级：实时 MCP 源（mx-ds-mcp 东方财富妙想 / tdx-connector 通达信）> 离线脚本兜底
+# （scripts/macro_snapshot.py 基于 akshare）。无论哪一路，均不经由本项目可降级数据网关
+# （ctx.gateway：Tushare > Akshare > 腾讯财经）。当前 skill.py 仅为占位骨架，真实执行逻辑
+# 在 SKILL.md + scripts/，需 LLM + 外部数据源支撑，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: script_based          # script_based | llm_prompt | base_skill（当前为 script_based，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: query
+    type: string
+    required: true
+    description: "调用参数：宏观分析请求（如从宏观数据出发判断大势/仓位/风格，或要求生成月度宏观配置报告）"
+  - name: sources
+    type: string
+    required: false
+    description: "取数源偏好；默认实时 MCP（mx-ds-mcp/tdx-connector）优先，离线 akshare 兜底（macro_snapshot.py）"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "《A股宏观配置月报》：一句话结论、宏观景气定位、五维度证据、资产配置建议（行业超低配表）、风险与跟踪日历、数据来源与免责"
+  - name: data
+    type: object
+    description: "结构化结果：宏观景气象限、五维度方向打分、行业/风格配置结论、数据截止日、来源标记（含 stale 滞后提示）"

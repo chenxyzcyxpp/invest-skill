@@ -1,0 +1,48 @@
+skill_id: sentiment_risk_warning
+skill_name: 舆情风险预警
+category: macro_event
+author: 姜青、Warwick
+version: 1.1.0              # 资产包版本（zip 名 v1.1.0）；SKILL.md frontmatter 内为 1.0.0
+spec: SKILL.md
+description: "用「市场/个股舆情 + 量价相对特征」训练随机森林，预测 A 股下一交易日波动率风险并分级（高/中/低 + 0-100 综合风险分）。双模式：大盘（上证/深成/创业板，沙箱可跑）与个股（需本机访问东方财富，含股吧情感）。"
+
+# 重要：本 Skill 是「脚本驱动型」（SKILL.md 提示词 + scripts/ 下可运行 Python）。
+# 其取数直连 Tushare / 东方财富 / 通达信（tdx），不经由本项目可降级数据网关
+# （ctx.gateway：Tushare > Akshare > 腾讯财经）。当前 skill.py 仅为占位骨架，
+# 真实执行逻辑在 SKILL.md + scripts/，需 LLM + 本地数据源（tushare/东财）支撑，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: script_based          # script_based | llm_prompt | base_skill（当前为 script_based，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: mode
+    type: string
+    required: true
+    description: "运行模式：market（大盘三指数）/ stock（个股）"
+  - name: code
+    type: string
+    required: false
+    description: "标的代码。大盘模式如 000001.SH / 399001.SZ / 399006.SZ；个股模式如 300666"
+  - name: days
+    type: int
+    required: false
+    description: "回看交易日数，默认 1250（约 60 个月滚动窗口）"
+  - name: months
+    type: int
+    required: false
+    description: "大盘模式滚动窗口月数，36 | 60"
+
+# 标准输出契约
+output:
+  - name: report_txt
+    type: file
+    description: "risk_report_market_<code>.txt / compare 版：预测波动率、风险等级、综合风险分、特征重要性"
+  - name: report_json
+    type: file
+    description: "risk_report_<code>.json：结构化结果（含 channels_meta、news_titles 等）"
+  - name: report_html
+    type: file
+    description: "个股模式 risk_report_<code>.html：可读报告"
+  - name: data
+    type: object
+    description: "结构化结果：预测波动率、风险等级、综合风险分 0-100、特征重要性、降级标记"

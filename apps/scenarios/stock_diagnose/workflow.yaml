@@ -1,0 +1,15 @@
+name: 诊股场景
+scene_id: stock_diagnose
+description: "个股深度诊断、基本面体检、估值测算、企业风险画像"
+# 编排：仅组合组件层 Skill，不含业务逻辑；同 parallel_group 并行，不同组串行。
+steps:
+  - skill_id: sentiment_risk_warning
+    parallel_group: 0
+    params: {}
+  - skill_id: stock_5d_deep_analysis
+    parallel_group: 0
+    params: {}
+  - skill_id: stock_comparative_analysis
+    parallel_group: 0
+    params: {}
+

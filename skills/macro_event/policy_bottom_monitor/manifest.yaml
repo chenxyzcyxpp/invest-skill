@@ -1,0 +1,15 @@
+skill_id: policy_bottom_monitor
+skill_name: 底部政策信号助手
+category: macro_event
+author: Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "对'当前（或当日新出台）政策'进行托底强度分级判断（S/A/B/C/D 双轴分类：工具强度×位置适配度），与量价抄底信号（a_share_bottom_monitor）叠加输出综合抄底判断；并支持每半年自动重跑回测、比对结论变化、修订政策地图。"
+
+# 重要：本 Skill 是「脚本驱动型」（SKILL.md 提示词 + scripts/ 下可运行 Python）。
+# 其位置计算直连本地 K 线（复用 ../a_share_bottom_monitor/data/*.csv，cron 每日增量更新），
+# 不经由本项目可降级数据网关（ctx.gateway：Tushare > Akshare > 腾讯财经）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + scripts/，需 LLM 驱动，
+# 尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: script_based          # script_based | llm_prompt | base_skill（当前为 script_based，待适配）

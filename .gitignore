@@ -1,0 +1,16 @@
+# 系统/工具目录
+.codebuddy/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 环境配置（含密钥）
+.env
+*.local
+
+# 本地数据交付物（非 skill 组件，不入库）
+build_data_source_xlsx.py
+invest_skill_data_sources.xlsx

@@ -1,0 +1,12 @@
+name: 策略场景
+scene_id: strategy
+description: "策略回测、拥挤度/羊群风险检测、策略赛马打分、策略归因"
+# 编排：仅组合组件层 Skill，不含业务逻辑；同 parallel_group 并行，不同组串行。
+steps:
+  - skill_id: macro_analysis
+    parallel_group: 0
+    params: {}
+  - skill_id: sentiment_risk_warning
+    parallel_group: 0
+    params: {}
+

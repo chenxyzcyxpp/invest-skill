@@ -1,0 +1,24 @@
+invest-skill
+Copyright 2026 The invest-skill Authors
+
+This product includes software developed by the invest-skill contributors
+(周周、姜青、Warwick 等).
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Third-party attributions
+------------------------
+- Skill 设计参考了多个公开方法论与开源实践，具体来源见各 Skill 目录下的
+  SKILL.md / references/ 说明。
+- 本项目不包含、不分发任何第三方行情数据；数据源由使用者自行接入并遵守
+  相应服务条款。

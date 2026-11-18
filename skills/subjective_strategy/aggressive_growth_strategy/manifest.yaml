@@ -1,0 +1,43 @@
+skill_id: aggressive_growth_strategy
+skill_name: 激进成长策略
+category: subjective_strategy
+author: Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "基于 Tushare 数据的 A 股小盘成长股评估框架：中证2000轮动选股、八步深度分析、技术面/资金面/舆情校验、综合评级，高评级入跟踪池"
+
+# 重要：本 Skill 是「提示词驱动型」（SKILL.md + references/ + templates/ 规范）。
+# 取数直连 Tushare（MCP 或本地 tushare 包），属「行情/基本面数据源」，
+# 不经本项目可降级数据网关（ctx.gateway）。当前 skill.py 仅为占位骨架，
+# 真实执行逻辑在 SKILL.md + LLM 取数，尚未包装为 BaseSkill。
+# 注意：本技能含可选「高评级入池」副作用步骤，依赖运行环境自备的
+#   ~/.hermes/aggressive-growth-tracker/update_tracker.py，不在本仓库内。
+calls_gateway: false
+runtime: llm_prompt          # script_based | llm_prompt | base_skill（当前为 llm_prompt，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: query
+    type: string
+    required: false
+    description: "待评估 A 股代码/名称；或请求用激进成长框架评估某股的语义"
+  - name: mode
+    type: string
+    required: false
+    description: "single（单股评估）| rotation（中证2000每日轮动，缺省读 cron 状态文件）"
+  - name: tushare_mode
+    type: string
+    required: false
+    description: "mcp（Tushare MCP 工具）| local（本地 tushare 包直连）；缺省依运行环境"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "reports/{date}_激进成长策略_{ts_code}.md"
+  - name: data
+    type: object
+    description: "结构化结果：八步分析、技术面/资金面信号、综合评级、入池状态"
+  - name: data_source
+    type: string
+    description: "数据源标记（如 tushare:mcp / tushare:local）"
