@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-10-19 16:34:57",
+  "source": "akshare",
+  "indicators": {
+    "china_pmi": {
+      "date": "2025-08-31",
+      "manufacturing_pmi": 49.4,
+      "stale": true,
+      "used_prev": false,
+      "non_manufacturing_pmi": 50.3
+    },
+    "china_cpi": {
+      "date": "2025-08-09",
+      "cpi_yoy": 0.0,
+      "stale": true,
+      "used_prev": false
+    },
+    "china_ppi": {
+      "date": "2025-08-09",
+      "ppi_yoy": -3.6,
+      "stale": true,
+      "used_prev": false
+    },
+    "china_money": {
+      "date": "2025-08-13",
+      "m2_yoy": 8.8,
+      "stale": true,
+      "used_prev": false,
+      "m1_yoy": 20.54,
+      "m1_date": "2008年01月份",
+      "m1_stale": true,
+      "m1_minus_m2": null,
+      "m1_minus_m2_note": "M1 数据源严重滞后(2008)，暂不计算 M1-M2 剪刀差，建议用实时源"
+    },
+    "china_gdp": {
+      "date": "2025-07-15",
+      "gdp_yoy": 5.2,
+      "stale": true,
+      "used_prev": false
+    },
+    "china_social_financing": {
+      "date": "202604",
+      "social_financing_increment": 6245.0,
+      "rmb_loan": -4006.0,
+      "stale": false
+    },
+    "china_lpr": {
+      "date": "2026-09-20",
+      "lpr_1y": 3.0,
+      "lpr_5y": 3.5,
+      "stale": false
+    },
+    "china_unemployment": {
+      "date": "202608",
+      "survey_unemployment": 5.3,
+      "local_hukou": 5.3,
+      "external_hukou": 5.2,
+      "stale": false
+    },
+    "china_industrial": {
+      "date": "2026年09月份",
+      "industrial_value_added_yoy": 5.5,
+      "stale": false
+    },
+    "china_retail": {
+      "date": "2008年01月份",
+      "retail_sales_yoy": 21.2,
+      "stale": true,
+      "note": "历史序列接口，可能滞后"
+    },
+    "china_trade": {
+      "date": "2025-08-07",
+      "export_yoy": 7.2,
+      "stale": true,
+      "used_prev": false,
+      "import_yoy": 4.1
+    },
+    "usa_cpi": {
+      "date": "2025-08-12",
+      "us_cpi_mom": 0.2,
+      "stale": true,
+      "used_prev": false
+    },
+    "usa_unemployment": {
+      "date": "2025-08-01",
+      "us_unemployment": 4.2,
+      "stale": true,
+      "used_prev": false
+    },
+    "usa_ism_pmi": {
+      "date": "2025-09-02",
+      "us_ism_pmi": 48.7,
+      "stale": true,
+      "used_prev": false
+    },
+    "usa_core_pce": {
+      "date": "2025-08-29",
+      "us_core_pce_yoy": 2.9,
+      "stale": true,
+      "used_prev": false
+    },
+    "rates_cn_us": {
+      "date": "2026-10-16",
+      "cn_10y": 1.648,
+      "us_10y": 5.09,
+      "cn_2y": 1.2547,
+      "us_2y": 4.74,
+      "cn_10y_2y_spread": 0.3933,
+      "us_10y_2y_spread": 0.35,
+      "stale": false
+    }
+  },
+  "meta": {
+    "ok": [
+      "china_pmi",
+      "china_cpi",
+      "china_ppi",
+      "china_money",
+      "china_gdp",
+      "china_social_financing",
+      "china_lpr",
+      "china_unemployment",
+      "china_industrial",
+      "china_retail",
+      "china_trade",
+      "usa_cpi",
+      "usa_unemployment",
+      "usa_ism_pmi",
+      "usa_core_pce",
+      "rates_cn_us"
+    ],
+    "fail": [],
+    "stale": [
+      "china_pmi",
+      "china_cpi",
+      "china_ppi",
+      "china_money",
+      "china_gdp",
+      "china_retail",
+      "china_trade",
+      "usa_cpi",
+      "usa_unemployment",
+      "usa_ism_pmi",
+      "usa_core_pce"
+    ],
+    "note": "stale 指标数据可能滞后，建议用 mx-ds-mcp / tdx-connector 实时源交叉验证"
+  }
+}

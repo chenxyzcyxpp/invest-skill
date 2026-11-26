@@ -1,0 +1,149 @@
+[
+  {
+    "schema": "invest-novice-card/1",
+    "card_type": "policy_bottom",
+    "title": "政策托底 · 9·24 政策组合拳",
+    "date": "2024-09-24",
+    "data_as_of": "2026-11-02",
+    "source": {"skill": "policy_bottom_monitor", "version": "1.0.0"},
+    "headline": {"tier": "red", "text": "这是力度最大的一档托底政策"},
+    "say": "这次是<b>真金白银进场买股票</b>类政策（增量资金，组合拳），力度属于最高一档：强刺激（S 级）。政策落地后上证实际走势：之后 1 周 <b>+21.9%</b>、1 个月 <b>+14.8%</b>、3 个月 <b>+18.5%</b>。但政策是放大器不是发令枪：它让底部更可能成立，不保证马上涨。",
+    "facts": [
+      {"k": "事件", "v": "9·24 政策组合拳"},
+      {"k": "日期", "v": "2024-09-24"},
+      {"k": "工具", "v": "增量资金（真金白银进场）"},
+      {"k": "力度", "v": "强刺激（S 级）"}
+    ],
+    "chips": [
+      {"text": "组合拳：真金白银进场类", "tone": "gold"},
+      {"text": "力度为全库最高档", "tone": "flat"}
+    ],
+    "figures": [
+      {"kind": "meter", "cap": "政策力度五档（本次=强刺激，即 S 级）", "levels": ["强刺激", "较大力度", "一般", "口头安抚", "收紧"], "active": 0},
+      {"kind": "bars", "cap": "政策落地后上证实际走势（5/20/60 个交易日 ≈ 1 周/1 月/3 月，%）", "unit": "%", "items": [
+        {"label": "后 1 周", "value": 21.9},
+        {"label": "后 1 个月", "value": 14.8},
+        {"label": "后 3 个月", "value": 18.5}
+      ]}
+    ],
+    "evidence": [
+      "来源：policy_bottom_monitor/references/policy-map.md（2026-11-02 v1.0 建库）",
+      "回测口径：上证 T 日收盘买入持有 N 交易日；运气线(step5) 60 日中位 -0.2%、胜率 50%",
+      "全库 26 条政策 / 17 组合；政策底不等于市场底"
+    ],
+    "small_sample": {"n": 26},
+    "disclaimer": null
+  },
+  {
+    "schema": "invest-novice-card/1",
+    "card_type": "policy",
+    "title": "政策解读 · 人工智能产业指导意见",
+    "date": "2026-03-28",
+    "data_as_of": "2026-03-28 09:00",
+    "source": {"skill": "policy_interpret", "version": "1.1.0"},
+    "headline": {"tier": "neutral", "text": "出了一份新政策，跟你相关的在这里"},
+    "say": "国家发展和改革委员会发布了《关于促进人工智能产业高质量发展的指导意见》。一句话说：这是我国人工智能产业的重要指导性文件，明确了未来 5 年的发展方向、目标和重点任务。跟股市有关的主要是<b>人工智能芯片、算法框架、计算机视觉</b>这些行业。",
+    "facts": [
+      {"k": "发布机构", "v": "国家发展和改革委员会"},
+      {"k": "发布时间", "v": "2026-03-28 09:00"},
+      {"k": "类型", "v": "行业政策 · 全国性"},
+      {"k": "有效期", "v": "5 年"}
+    ],
+    "chips": [
+      {"text": "受益行业 8 个（报告观点）", "tone": "gold"},
+      {"text": "风险：技术迭代 / 国际竞争 / 数据安全", "tone": "flat"}
+    ],
+    "figures": [
+      {"kind": "list", "cap": "受益行业（报告观点，前 6）", "items": [
+        {"head": "人工智能芯片", "tone": "gold"},
+        {"head": "算法框架", "tone": "gold"},
+        {"head": "计算机视觉", "tone": "gold"},
+        {"head": "智能制造", "tone": "flat"},
+        {"head": "智慧医疗", "tone": "flat"},
+        {"head": "智能交通", "tone": "flat"}
+      ]}
+    ],
+    "evidence": [
+      "政策编号 P2026032801；样例来源 policy_interpret/references/EXAMPLE_OUTPUT.md",
+      "受益行业与影响范围为报告分析结论（报告观点），非政策原文",
+      "影响范围覆盖基础层（芯片/算法/框架）× 技术层（视觉/语音/NLP）× 应用层（制造/金融/医疗/交通）"
+    ],
+    "small_sample": null,
+    "disclaimer": null
+  },
+  {
+    "schema": "invest-novice-card/1",
+    "card_type": "overnight",
+    "title": "隔夜外围 · 开盘前五件事",
+    "date": "2026-04-28",
+    "data_as_of": "2026-04-28 08:00",
+    "source": {"skill": "overnight_review", "version": "1.4.3"},
+    "headline": {"tier": "neutral", "text": "开盘前知道这些就够了"},
+    "say": "① <b>芯片股集体下挫</b>：费城半导体指数下跌，ARM、闪迪跌幅显著——对 A 股半导体链情绪偏压制（报告推演）。② <b>油价涨超 3%</b>，能源股逆势上涨。③ 市场预期美联储 4 月维持利率不变的概率为 <b>100%</b>。④ 阿联酋宣布自 2026-05-01 起退出 OPEC+。⑤ 港股反弹：恒生科技 <b>+2.18%</b>，南向资金连续 3 日净流入。美股三大指数隔夜分化，科技股涨跌互现。",
+    "facts": [
+      {"k": "恒生指数", "v": "18254.30（+1.25%）"},
+      {"k": "恒生科技", "v": "3842.15（+2.18%）"}
+    ],
+    "chips": [
+      {"text": "美股：分化（科技涨跌互现）", "tone": "flat"},
+      {"text": "油价 +3% 以上（隔夜）", "tone": "up"}
+    ],
+    "figures": [
+      {"kind": "bars", "cap": "隔夜关键标的涨跌（%）", "unit": "%", "items": [
+        {"label": "美团", "value": 3.12},
+        {"label": "腾讯控股", "value": 2.85},
+        {"label": "恒生科技", "value": 2.18},
+        {"label": "苹果", "value": 1.16},
+        {"label": "微软", "value": 1.04},
+        {"label": "英伟达", "value": -1.59}
+      ]}
+    ],
+    "evidence": [
+      "样例存档：overnight_review/references/sample-output.md（v1.2.0 版式样例；当前 v1.4.3 为「今日五件事」骨架）",
+      "数据来源：东方财富妙想 / 腾讯自选股 / 通达信 MCP；数据截止 2026-04-28",
+      "「对 A 股传导」句为报告推演标注；五件事事实均来自样例报告原文"
+    ],
+    "small_sample": null,
+    "disclaimer": null
+  },
+  {
+    "schema": "invest-novice-card/1",
+    "card_type": "industry",
+    "title": "行业强弱 · 2026-10-16",
+    "date": "2026-10-16",
+    "data_as_of": "2026-10-16 16:30",
+    "source": {"skill": "industry_brief", "version": "1.0.0"},
+    "headline": {"tier": "neutral", "text": "今天哪些行业强、哪些弱"},
+    "say": "全市场 <b>18 涨 13 跌</b>。最强 <b>电子（+2.31%）</b>，电力设备、医药生物跟涨；房地产持续失血（近 5 日 <b>-4.20%</b>）。资金向硬科技聚集：电子主力净流入 <b>42.6 亿</b>居首。",
+    "facts": [
+      {"k": "数据状态", "v": "partial（tushare>akshare 降级）"},
+      {"k": "生成时间", "v": "2026-10-16 16:30"}
+    ],
+    "chips": [
+      {"text": "R01 强势延续 · 电子", "tone": "gold"},
+      {"text": "R02 资金异动 · 电子", "tone": "gold"},
+      {"text": "R03 持续失血 · 房地产", "tone": "down"},
+      {"text": "R05 事件驱动 · 半导体", "tone": "flat"}
+    ],
+    "figures": [
+      {"kind": "bars", "cap": "行业当日涨跌 Top3（%）", "unit": "%", "items": [
+        {"label": "电子", "value": 2.31},
+        {"label": "电力设备", "value": 1.86},
+        {"label": "医药生物", "value": 1.12}
+      ]},
+      {"kind": "bars", "cap": "主力净流入（亿元）", "unit": " 亿", "items": [
+        {"label": "电子", "value": 42.6},
+        {"label": "电力设备", "value": 28.3},
+        {"label": "食品饮料", "value": 15.1}
+      ]}
+    ],
+    "evidence": [
+      "R01 证据：电子 pct5d 5.12% ≥ 阈值 3.0%",
+      "R02 证据：电子主力净流入 42.6 亿、净流入/成交额 2.1%、排名 1",
+      "R03 证据：房地产 pct5d -4.20%、净流出 -12.4 亿",
+      "数据链：tushare ok → akshare fail:timeout（部分降级，如实标注）"
+    ],
+    "small_sample": null,
+    "disclaimer": null
+  }
+]

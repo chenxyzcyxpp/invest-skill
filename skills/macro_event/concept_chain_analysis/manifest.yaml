@@ -1,0 +1,46 @@
+skill_id: concept_chain_analysis
+skill_name: 主题产业链深度分析
+category: macro_event
+author: Warwick
+version: "1.0.0"
+spec: SKILL.md
+description: "以产业逻辑驱动，对主题/产业链上下游纵深拆解，可选叠加量化策略持仓交叉分析"
+
+# 重要：本 Skill 是「提示词驱动型」（SKILL.md + references/ 规范），与同目录的
+# market_hotspot 并列、互补：market_hotspot 由"热点"顺势带出产业链成分股（罗列级），
+# 本 Skill 由"产业逻辑"主动纵深拆解上下游（分层级），并可选衔接 racing_quant_pick
+# 的持仓做交叉分析。取数直连 AkShare + WebSearch/WebFetch（公开可得数据源），
+# 不经 ctx.gateway（见 calls_gateway=false），与 market_hotspot 同口径。
+calls_gateway: false
+runtime: llm_prompt          # script_based | llm_prompt | base_skill（当前为 llm_prompt，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: query
+    type: string
+    required: true
+    description: "分析对象：主题/产业链名称或描述，如「超节点算力产业链」「储能产业链」"
+  - name: with_holdings
+    type: boolean
+    required: false
+    description: "是否叠加持仓交叉分析（默认 false）；true 时衔接 racing_quant_pick 策略持仓"
+  - name: strategy_id
+    type: string
+    required: false
+    description: "with_holdings=true 时指定的策略 ID/名称；为空则取默认策略池"
+  - name: depth
+    type: string
+    required: false
+    description: "分析深度：quick（仅分层框架）/ deep（分层+行情+研判，默认 deep）"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "reports/{date}_主题产业链深度分析_{主题}.md"
+  - name: data
+    type: object
+    description: "结构化结果：产业链分层矩阵、各环节标的(代码/名称/分层)、持仓交叉表、可溯源标记"
+  - name: data_source
+    type: string
+    description: "实际数据源标记（akshare + 公开网站检索 + 可选策略持仓源）"

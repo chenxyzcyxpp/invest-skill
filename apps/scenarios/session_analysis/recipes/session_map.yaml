@@ -1,0 +1,85 @@
+# session_map.yaml — 时段编排配方（可迭代核心，纯数据）
+#
+# 设计纪律（见 DESIGN.md 第七节）：
+#   1. 本文件只声明「哪个时段、按什么顺序、跑哪些 Skill、出什么卡、取数截止口径」，
+#      不写任何分析逻辑、不硬编码任何数值/日期/行情读数。
+#   2. 每次上游 Skill 升级：什么都不改——Agent 执行时读该 Skill 最新 SKILL.md。
+#   3. 新增 Skill：在对应时段 steps 加一行；新卡型需先在 presentation/SKILL.md 补映射。
+#   4. skill_id / card_type 必须是已入库资产的真实 ID；时效口径见 as_of_policy。
+#   5. 时段时刻对齐《因维思投研作业流程 SOP》：盘前 08:30–09:25、午盘 11:30–13:00、盘后 15:10–20:00。
+
+version: 1
+author: Warwick
+schema: session-analysis-map/1
+
+# 时段级默认口径；步骤级 as_of_policy 可覆盖。
+# pre_open  = 严格锁定 09:25 前可得信息（K线截到前一交易日、新闻剔除当日收评）——SOP 时点纪律
+# intraday  = 午盘实时口径（11:30 数据截面）
+# close     = 收盘后口径（15:10 后）
+policies:
+  pre_open:
+    lock_before: "09:25"
+    kline_cutoff: previous_trading_day
+    exclude: ["当日收评", "盘后公告"]
+    reason: "SOP 实战：同日盘前舆情 -0.808 看空、收盘后 +0.664 看多，口径错则结论失真"
+  intraday:
+    lock_before: "11:30"
+    kline_cutoff: current_day_morning
+    experimental: true
+  close:
+    lock_before: "15:10"
+    kline_cutoff: current_day_close
+
+sessions:
+  # ── 盘前 08:30–09:25（SOP 6 步，全部采纳）────────────────────────
+  pre_market:
+    name: 盘前综合研判
+    window: "08:30–09:25"
+    as_of_policy: pre_open
+    steps:
+      - {order: 1, skill_id: overnight_review,       card_type: overnight,     required: true,  note: "隔夜外围复盘·核心；Bloomberg 今日五件事决策层"}
+      - {order: 2, skill_id: policy_interpret,       card_type: policy,        required: false, note: "政策消息梳理"}
+      - {order: 3, skill_id: sentiment_risk_warning, card_type: sentiment,     required: true,  as_of_policy: pre_open, note: "波动风险预警·核心；必须用盘前口径输入防时点失真"}
+      - {order: 4, skill_id: market_hotspot,         card_type: hotspot,       required: false, note: "主线热点预判（SOP 原文为 hotspot/industry 或，默认 hotspot）"}
+      - {order: 5, skill_id: racing_quant_pick,      card_type: quantpick,     required: false, note: "策略持仓核对；凭据缺失如实标缺口，不编造"}
+      - {order: 6, skill_id: a_share_bottom_monitor, card_type: bottom_signal, required: true,  mode: C, note: "决策检查表·核心；沿用模式C 适用范围守卫"}
+    report_sections: [大势判断, 主线方向, 风险等级, 策略持仓, 决策检查结论]
+    # SOP 亮点：盘前附预判位，盘后可回填实际收盘做对照
+    review_slot: "预判 vs 实际收盘对照（盘后回填）"
+
+  # ── 午盘 11:30–13:00（SOP 未覆盖，实验性建议组合）────────────────
+  midday:
+    name: 午盘速览
+    window: "11:30–13:00"
+    as_of_policy: intraday
+    experimental: true
+    experimental_note: "SOP 无午盘流程，本段为基于现有 Skill 的建议性组合，未经实战验证"
+    steps:
+      - {order: 1, skill_id: market_hotspot,         card_type: hotspot,   required: false, note: "上午热点速览"}
+      - {order: 2, skill_id: industry_brief,         card_type: industry,  required: false, note: "行业强弱"}
+      - {order: 3, skill_id: sentiment_risk_warning, card_type: sentiment, required: false, as_of_policy: intraday, note: "波动风险预警；午盘口径输入"}
+    report_sections: [上午热点, 行业强弱, 风险提示, 下午关注]
+
+  # ── 盘后 15:10–20:00（SOP 7 步，全部采纳）────────────────────────
+  closing:
+    name: 盘后综合分析
+    window: "15:10–20:00"
+    as_of_policy: close
+    steps:
+      - {order: 1, skill_id: market_daily_review,        card_type: daily,         required: true,  note: "收盘复盘·核心"}
+      - {order: 2, skill_id: industry_brief,             card_type: industry,      required: true,  note: "行业强弱速报·核心"}
+      - {order: 3, skill_id: market_hotspot,             card_type: hotspot,       required: false, note: "主线归因；限流时降级交叉验证"}
+      - {order: 4, skill_id: sentiment_risk_warning,     card_type: sentiment,     required: false, small_sample_warn: true, note: "舆情风险评分；小样本必警"}
+      - {order: 5, skill_id: a_share_bottom_monitor,     card_type: bottom_signal, required: true,  note: "底部信号监控·核心"}
+      - {order: 6, skill_id: racing_quant_pick,          card_type: quantpick,     required: false, note: "策略持仓更新；凭据缺失如实标注"}
+      - {order: 7, skill_id: stock_comparative_analysis, card_type: stockcmp,      required: false, depends_on: racing_quant_pick, note: "重点公司验证；依赖⑥持仓池，无输入则不产出"}
+    report_sections: [今日复盘, 行业速报, 热点归因, 风险评分, 底部信号, 策略动态, 重点验证]
+
+# ── 执行纪律（SOP 实战纪律，写进配方让 Agent 每次都能读到）────────
+discipline:
+  - "时点守卫：严格按 as_of_policy 锁定取数口径，盘前不得混入当日收盘/盘后信息"
+  - "失败隔离：单点 Skill 失败或凭据缺失，如实记入『数据缺口』，不编造、不拖垮整场"
+  - "依赖跳过：depends_on 前置无输出则跳过该步并标注原因（如重点公司验证无持仓池）"
+  - "时效判定：每个结果做 data_as_of 判定，过期按 required 处理（核心降级说明／可选标 —）"
+  - "必需降级：required 步缺失或过期 → 整场标注『数据未就绪』；可选步缺失 → 标 — 继续"
+  - "数字零加工：所有数值逐字段照抄上游，不重算、不臆测；来源与口径随卡保留"

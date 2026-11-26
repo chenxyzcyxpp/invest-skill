@@ -1,0 +1,48 @@
+skill_id: stock_5d_deep_analysis
+skill_name: 股票五维深度分析
+category: subject_analysis
+author: Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "对单只 A 股标的执行五维度深度分析，可选叠加同业/行业对标（相对估值/动量/基本面/资金）"
+
+# 重要：本 Skill 是「提示词驱动型」（SKILL.md + references/ 五维度框架与输出模板）。
+# 其取数直连 Tushare / akshare / 东方财富·腾讯兜底（可降级，见 references/analysis-framework.md），
+# 不经由本项目可降级数据网关（ctx.gateway：Tushare > Akshare > 腾讯财经）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + LLM 取数，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: llm_prompt          # script_based | llm_prompt | base_skill（当前为 llm_prompt，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: ticker
+    type: string
+    required: true
+    description: "目标股票代码/名称"
+  - name: with_peers
+    type: boolean
+    required: false
+    description: "是否叠加同业/行业对标，默认 false（纯五维深度分析）"
+  - name: peers
+    type: list
+    required: false
+    description: "同业可比公司列表；with_peers=true 且留空时按申万行业自动取"
+  - name: focus
+    type: string
+    required: false
+    description: "分析侧重：valuation（估值）/ momentum（动量）/ fund（资金）/ fundamentals（基本面）/ all（默认）"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "reports/{date}_股票五维深度分析_{ticker}.md"
+  - name: report_html
+    type: file
+    description: "reports/{date}_股票五维深度分析_{ticker}.html"
+  - name: data
+    type: object
+    description: "结构化结果：五维度、可选同业对标、降级标记 degraded/degrade_trace"
+  - name: data_source
+    type: string
+    description: "实际数据源标记（tushare/akshare/eastmoney/tencent）"

@@ -1,0 +1,48 @@
+skill_id: value_investing
+skill_name: 价值投资分析
+category: subject_analysis
+author: 姜青、Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "自上而下的基本面价值投资分析框架：宏观四方向 → 行业三模型 → 公司质量 SWOT → 估值 → 综合结论，核心信条『好公司≠好股票、价值≠价格』；多股对比可选调用四层加权打分卡，只给分析框架与参考结论，不荐股、不给目标价。"
+
+# 本 Skill 为「提示词驱动型」（SKILL.md + references/ 方法论与数据源 + scripts/ 打分卡）。
+# 取数直连使用者配置的工具（MCP / Tushare / 公开网页），不经本项目 ctx.gateway，
+# 故 calls_gateway: false（语义为"不经网关"，非"不取数"）。
+# skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + LLM 取数，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: llm_prompt          # script_based | llm_prompt | base_skill（当前为 llm_prompt，待适配）
+
+# 标准输入契约
+input:
+  - name: target
+    type: string
+    required: true
+    description: "公司名称 / 6 位代码（多只用逗号分隔）/ 行业名称"
+  - name: as_of
+    type: string
+    required: false
+    description: "报告基准日，默认当日"
+  - name: output_format
+    type: string
+    required: false
+    description: "输出形式：对话表格（默认）/ CSV / HTML"
+  - name: use_scorecard
+    type: boolean
+    required: false
+    description: "多股对比时是否调用 scripts/value_scorecard.py 做四层加权打分，默认 false"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "结构化价值投资分析报告（先结论后拆解，含五步、风险提示、数据缺口）"
+  - name: scorecard_csv
+    type: file
+    description: "四层打分卡 CSV（可选，use_scorecard=true 时；UTF-8 BOM）"
+  - name: data
+    type: object
+    description: "结构化结果：Step 0 数据表（来源/日期/口径）、五步结论、估值判断、数据缺口清单"
+  - name: data_source
+    type: string
+    description: "实际数据源标记（东财 / tdx-connector / mx-ds-mcp / 定期报告 等）"

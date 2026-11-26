@@ -1,0 +1,48 @@
+skill_id: racing_quant_pick
+skill_name: 赛马量化策略选股
+category: quant_strategy
+author: Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "从远程量化策略库智能匹配策略、获取其最新持仓个股，输出可溯源的选股池与策略画像"
+
+# 重要：本 Skill 是「提示词驱动型」（SKILL.md + references/ 规范）。
+# 取数直连远程 MySQL 策略库（可配置 endpoint，见 references/strategy-schema.md），
+# 属「策略信号源」而非行情数据源，不经由本项目可降级数据网关（ctx.gateway）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + LLM 取数，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: llm_prompt          # script_based | llm_prompt | base_skill（当前为 llm_prompt，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: query
+    type: string
+    required: false
+    description: "用户需求/策略关键词/偏好描述；为空时进入互动偏好匹配"
+  - name: strategy_id
+    type: string
+    required: false
+    description: "用户直接指定的策略 ID 或名称（模糊匹配），优先级高于 query"
+  - name: top_n
+    type: integer
+    required: false
+    description: "持仓个股深度分析数量，默认 5"
+  - name: db_config
+    type: object
+    required: false
+    description: "策略库连接参数 {host, port, user, password, database}；必填项须由环境变量或本对象提供，仓库不内置任何默认值"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "reports/{date}_赛马量化策略选股_{strategy}.md"
+  - name: report_html
+    type: file
+    description: "reports/{date}_赛马量化策略选股_{strategy}.html"
+  - name: data
+    type: object
+    description: "结构化结果：匹配策略列表、持仓个股池(代码/名称/权重)、可溯源标记"
+  - name: data_source
+    type: string
+    description: "策略信号源标记（如 mysql:<接入方自有库名>）"

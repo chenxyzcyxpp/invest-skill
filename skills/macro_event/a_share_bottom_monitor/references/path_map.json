@@ -1,0 +1,633 @@
+{
+  "version": "1.1",
+  "updated": "2026-10-27",
+  "data_cutoff": "2026-10-27",
+  "method": "事件去重复用 core.dedup + core.GAP_SINGLE；持有期取 core.HOLD_DAYS 末档；MAE 用收盘价且不含买入当日；收益判定沿用 core.win_rate；Wilson z / 年化交易日 / MAE 分位点 / 深跌区采样步长读 decision-rules.md 配置块；深跌区阈值取 core.DEEP25；updated 与 data_cutoff 一致以保证确定性重建",
+  "indices": {
+    "000001.SH": {
+      "name": "上证指数",
+      "combos": {},
+      "deep_random_baseline": {
+        "n": 68,
+        "win60": 55.9,
+        "wilson_ci": [
+          44.1,
+          67.1
+        ],
+        "median_ret60": 2.0,
+        "median_mae": -5.25
+      },
+      "excess_vs_baseline_pp": null,
+      "excess_vs_deep_pp": null,
+      "primary_combo": null
+    },
+    "399001.SZ": {
+      "name": "深证成指",
+      "combos": {
+        "C3": {
+          "n": 4,
+          "win60": 100.0,
+          "wilson_ci": [
+            51.0,
+            100.0
+          ],
+          "median_ret60": 15.2,
+          "mean_ret60": 13.5,
+          "best_ret60": 20.8,
+          "worst_ret60": 2.8,
+          "mae_worst": -6.15,
+          "prob_under3_20d": 25.0,
+          "mae_day_median": 8.0,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2015": 1,
+            "2018": 1,
+            "2022": 2
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -5.26,
+          "mae_p25": -3.92,
+          "mae_p50": -2.73,
+          "mae_p75": -2.12,
+          "mae_p90": -1.85,
+          "prob_mae_gt5": 25.0,
+          "prob_mae_gt10": 0.0,
+          "excess_vs_baseline_pp": 59.6,
+          "excess_vs_deep_pp": 34.3
+        },
+        "C2": {
+          "n": 6,
+          "win60": 83.3,
+          "wilson_ci": [
+            43.6,
+            97.0
+          ],
+          "median_ret60": 7.8,
+          "mean_ret60": 8.5,
+          "best_ret60": 20.8,
+          "worst_ret60": -8.9,
+          "mae_worst": -16.45,
+          "prob_under3_20d": 33.3,
+          "mae_day_median": 16.0,
+          "pct_neg_ret10": 50.0,
+          "pct_neg_ret20": 33.3,
+          "failures": [
+            {
+              "date": "2018-08-03",
+              "ret60": -8.9,
+              "mae": -16.45
+            }
+          ],
+          "year_counts": {
+            "2015": 1,
+            "2018": 2,
+            "2022": 2,
+            "2024": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -13.72,
+          "mae_p25": -10.07,
+          "mae_p50": -6.73,
+          "mae_p75": -3.25,
+          "mae_p90": -1.97,
+          "prob_mae_gt5": 66.7,
+          "prob_mae_gt10": 33.3,
+          "excess_vs_baseline_pp": 42.9,
+          "excess_vs_deep_pp": 17.6
+        },
+        "C5": {
+          "n": 2,
+          "win60": 100.0,
+          "wilson_ci": [
+            34.2,
+            100.0
+          ],
+          "median_ret60": 13.2,
+          "mean_ret60": 13.2,
+          "best_ret60": 20.8,
+          "worst_ret60": 5.7,
+          "mae_worst": -9.16,
+          "prob_under3_20d": 100.0,
+          "mae_day_median": 10.5,
+          "pct_neg_ret10": 50.0,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2015": 1,
+            "2016": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -8.86,
+          "mae_p25": -8.41,
+          "mae_p50": -7.66,
+          "mae_p75": -6.9,
+          "mae_p90": -6.45,
+          "prob_mae_gt5": 100.0,
+          "prob_mae_gt10": 0.0,
+          "excess_vs_baseline_pp": 59.6,
+          "excess_vs_deep_pp": 34.3
+        },
+        "C4": {
+          "n": 6,
+          "win60": 66.7,
+          "wilson_ci": [
+            30.0,
+            90.3
+          ],
+          "median_ret60": 8.6,
+          "mean_ret60": 8.9,
+          "best_ret60": 34.5,
+          "worst_ret60": -7.5,
+          "mae_worst": -14.67,
+          "prob_under3_20d": 50.0,
+          "mae_day_median": 10.5,
+          "pct_neg_ret10": 66.7,
+          "pct_neg_ret20": 16.7,
+          "failures": [
+            {
+              "date": "2018-08-06",
+              "ret60": -7.5,
+              "mae": -14.67
+            },
+            {
+              "date": "2018-11-06",
+              "ret60": -4.0,
+              "mae": -9.01
+            }
+          ],
+          "year_counts": {
+            "2015": 1,
+            "2016": 1,
+            "2018": 2,
+            "2022": 1,
+            "2024": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -11.84,
+          "mae_p25": -9.0,
+          "mae_p50": -8.45,
+          "mae_p75": -6.53,
+          "mae_p90": -0.62,
+          "prob_mae_gt5": 83.3,
+          "prob_mae_gt10": 16.7,
+          "excess_vs_baseline_pp": 26.3,
+          "excess_vs_deep_pp": 1.0
+        }
+      },
+      "deep_random_baseline": {
+        "n": 102,
+        "win60": 65.7,
+        "wilson_ci": [
+          56.1,
+          74.2
+        ],
+        "median_ret60": 3.8,
+        "median_mae": -5.73
+      },
+      "excess_vs_baseline_pp": 59.6,
+      "excess_vs_deep_pp": 34.3,
+      "primary_combo": "C3"
+    },
+    "399006.SZ": {
+      "name": "创业板指",
+      "combos": {
+        "C3": {
+          "n": 5,
+          "win60": 100.0,
+          "wilson_ci": [
+            56.6,
+            100.0
+          ],
+          "median_ret60": 9.9,
+          "mean_ret60": 10.2,
+          "best_ret60": 26.2,
+          "worst_ret60": 0.1,
+          "mae_worst": -14.81,
+          "prob_under3_20d": 20.0,
+          "mae_day_median": 4.0,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 20.0,
+          "failures": [],
+          "year_counts": {
+            "2016": 1,
+            "2018": 1,
+            "2022": 2,
+            "2023": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -10.04,
+          "mae_p25": -2.88,
+          "mae_p50": -2.77,
+          "mae_p75": -0.85,
+          "mae_p90": 0.52,
+          "prob_mae_gt5": 20.0,
+          "prob_mae_gt10": 20.0,
+          "excess_vs_baseline_pp": 59.6,
+          "excess_vs_deep_pp": 45.2
+        },
+        "C2": {
+          "n": 6,
+          "win60": 83.3,
+          "wilson_ci": [
+            43.6,
+            97.0
+          ],
+          "median_ret60": 7.4,
+          "mean_ret60": 10.9,
+          "best_ret60": 40.6,
+          "worst_ret60": -0.3,
+          "mae_worst": -16.74,
+          "prob_under3_20d": 33.3,
+          "mae_day_median": 26.5,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 50.0,
+          "failures": [
+            {
+              "date": "2022-03-08",
+              "ret60": -0.3,
+              "mae": -16.74
+            }
+          ],
+          "year_counts": {
+            "2016": 1,
+            "2018": 1,
+            "2022": 2,
+            "2023": 1,
+            "2024": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -15.77,
+          "mae_p25": -11.83,
+          "mae_p50": -2.83,
+          "mae_p75": -1.47,
+          "mae_p90": 0.2,
+          "prob_mae_gt5": 33.3,
+          "prob_mae_gt10": 33.3,
+          "excess_vs_baseline_pp": 42.9,
+          "excess_vs_deep_pp": 28.5
+        },
+        "C4": {
+          "n": 6,
+          "win60": 83.3,
+          "wilson_ci": [
+            43.6,
+            97.0
+          ],
+          "median_ret60": 4.1,
+          "mean_ret60": 8.0,
+          "best_ret60": 33.5,
+          "worst_ret60": -3.8,
+          "mae_worst": -14.14,
+          "prob_under3_20d": 66.7,
+          "mae_day_median": 19.0,
+          "pct_neg_ret10": 33.3,
+          "pct_neg_ret20": 66.7,
+          "failures": [
+            {
+              "date": "2018-09-10",
+              "ret60": -3.8,
+              "mae": -13.36
+            }
+          ],
+          "year_counts": {
+            "2016": 1,
+            "2018": 2,
+            "2022": 2,
+            "2024": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -13.75,
+          "mae_p25": -12.8,
+          "mae_p50": -8.41,
+          "mae_p75": -4.64,
+          "mae_p90": -1.82,
+          "prob_mae_gt5": 66.7,
+          "prob_mae_gt10": 50.0,
+          "excess_vs_baseline_pp": 42.9,
+          "excess_vs_deep_pp": 28.5
+        },
+        "C1": {
+          "n": 4,
+          "win60": 100.0,
+          "wilson_ci": [
+            51.0,
+            100.0
+          ],
+          "median_ret60": 6.1,
+          "mean_ret60": 9.6,
+          "best_ret60": 26.2,
+          "worst_ret60": 0.1,
+          "mae_worst": -11.12,
+          "prob_under3_20d": 25.0,
+          "mae_day_median": 11.5,
+          "pct_neg_ret10": 25.0,
+          "pct_neg_ret20": 25.0,
+          "failures": [],
+          "year_counts": {
+            "2016": 1,
+            "2018": 1,
+            "2022": 1,
+            "2024": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -8.65,
+          "mae_p25": -4.94,
+          "mae_p50": -1.86,
+          "mae_p75": -0.28,
+          "mae_p90": 0.75,
+          "prob_mae_gt5": 25.0,
+          "prob_mae_gt10": 25.0,
+          "excess_vs_baseline_pp": 59.6,
+          "excess_vs_deep_pp": 45.2
+        },
+        "C5": {
+          "n": 3,
+          "win60": 100.0,
+          "wilson_ci": [
+            43.8,
+            100.0
+          ],
+          "median_ret60": 26.2,
+          "mean_ret60": 30.6,
+          "best_ret60": 52.7,
+          "worst_ret60": 12.8,
+          "mae_worst": -8.72,
+          "prob_under3_20d": 33.3,
+          "mae_day_median": 1.0,
+          "pct_neg_ret10": 33.3,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2015": 1,
+            "2016": 1,
+            "2022": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -7.15,
+          "mae_p25": -4.79,
+          "mae_p50": -0.85,
+          "mae_p75": 3.16,
+          "mae_p90": 5.56,
+          "prob_mae_gt5": 33.3,
+          "prob_mae_gt10": 0.0,
+          "excess_vs_baseline_pp": 59.6,
+          "excess_vs_deep_pp": 45.2
+        }
+      },
+      "deep_random_baseline": {
+        "n": 155,
+        "win60": 54.8,
+        "wilson_ci": [
+          47.0,
+          62.5
+        ],
+        "median_ret60": 0.7,
+        "median_mae": -7.48
+      },
+      "excess_vs_baseline_pp": 59.6,
+      "excess_vs_deep_pp": 45.2,
+      "primary_combo": "C3"
+    },
+    "932000.CSI": {
+      "name": "中证2000",
+      "combos": {
+        "C3": {
+          "n": 6,
+          "win60": 100.0,
+          "wilson_ci": [
+            61.0,
+            100.0
+          ],
+          "median_ret60": 18.5,
+          "mean_ret60": 20.2,
+          "best_ret60": 40.3,
+          "worst_ret60": 2.9,
+          "mae_worst": -10.25,
+          "prob_under3_20d": 33.3,
+          "mae_day_median": 2.5,
+          "pct_neg_ret10": 16.7,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2016": 1,
+            "2018": 1,
+            "2019": 1,
+            "2022": 1,
+            "2024": 2
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -8.95,
+          "mae_p25": -6.19,
+          "mae_p50": -0.3,
+          "mae_p75": 1.82,
+          "mae_p90": 2.37,
+          "prob_mae_gt5": 33.3,
+          "prob_mae_gt10": 16.7,
+          "excess_vs_baseline_pp": 48.9,
+          "excess_vs_deep_pp": 43.4
+        },
+        "C2": {
+          "n": 7,
+          "win60": 85.7,
+          "wilson_ci": [
+            48.7,
+            97.4
+          ],
+          "median_ret60": 12.6,
+          "mean_ret60": 17.7,
+          "best_ret60": 40.3,
+          "worst_ret60": -1.7,
+          "mae_worst": -14.27,
+          "prob_under3_20d": 28.6,
+          "mae_day_median": 2.0,
+          "pct_neg_ret10": 14.3,
+          "pct_neg_ret20": 14.3,
+          "failures": [
+            {
+              "date": "2018-01-31",
+              "ret60": -1.7,
+              "mae": -11.65
+            }
+          ],
+          "year_counts": {
+            "2016": 1,
+            "2017": 1,
+            "2018": 1,
+            "2019": 1,
+            "2022": 1,
+            "2024": 2
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -12.7,
+          "mae_p25": -6.74,
+          "mae_p50": 0.95,
+          "mae_p75": 1.62,
+          "mae_p90": 2.3,
+          "prob_mae_gt5": 28.6,
+          "prob_mae_gt10": 28.6,
+          "excess_vs_baseline_pp": 34.6,
+          "excess_vs_deep_pp": 29.1
+        },
+        "C5": {
+          "n": 4,
+          "win60": 100.0,
+          "wilson_ci": [
+            51.0,
+            100.0
+          ],
+          "median_ret60": 16.9,
+          "mean_ret60": 16.4,
+          "best_ret60": 26.4,
+          "worst_ret60": 5.4,
+          "mae_worst": -15.64,
+          "prob_under3_20d": 50.0,
+          "mae_day_median": 6.5,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2016": 1,
+            "2022": 1,
+            "2024": 1,
+            "2026": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -12.12,
+          "mae_p25": -6.85,
+          "mae_p50": -2.55,
+          "mae_p75": -0.41,
+          "mae_p90": 0.97,
+          "prob_mae_gt5": 25.0,
+          "prob_mae_gt10": 25.0,
+          "excess_vs_baseline_pp": 48.9,
+          "excess_vs_deep_pp": 43.4
+        },
+        "C4": {
+          "n": 6,
+          "win60": 66.7,
+          "wilson_ci": [
+            30.0,
+            90.3
+          ],
+          "median_ret60": 8.1,
+          "mean_ret60": 9.6,
+          "best_ret60": 29.9,
+          "worst_ret60": -8.1,
+          "mae_worst": -15.64,
+          "prob_under3_20d": 50.0,
+          "mae_day_median": 13.0,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 16.7,
+          "failures": [
+            {
+              "date": "2018-06-19",
+              "ret60": -8.1,
+              "mae": -8.44
+            },
+            {
+              "date": "2018-09-11",
+              "ret60": -2.4,
+              "mae": -14.29
+            }
+          ],
+          "year_counts": {
+            "2018": 3,
+            "2022": 1,
+            "2024": 2
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -14.96,
+          "mae_p25": -12.83,
+          "mae_p50": -7.22,
+          "mae_p75": -4.36,
+          "mae_p90": -1.28,
+          "prob_mae_gt5": 66.7,
+          "prob_mae_gt10": 33.3,
+          "excess_vs_baseline_pp": 15.6,
+          "excess_vs_deep_pp": 10.1
+        },
+        "C1": {
+          "n": 3,
+          "win60": 100.0,
+          "wilson_ci": [
+            43.8,
+            100.0
+          ],
+          "median_ret60": 12.6,
+          "mean_ret60": 15.6,
+          "best_ret60": 29.9,
+          "worst_ret60": 4.2,
+          "mae_worst": -14.27,
+          "prob_under3_20d": 66.7,
+          "mae_day_median": 4.0,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2018": 1,
+            "2022": 1,
+            "2024": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -12.62,
+          "mae_p25": -10.14,
+          "mae_p50": -6.01,
+          "mae_p75": -2.38,
+          "mae_p90": -0.21,
+          "prob_mae_gt5": 66.7,
+          "prob_mae_gt10": 33.3,
+          "excess_vs_baseline_pp": 48.9,
+          "excess_vs_deep_pp": 43.4
+        },
+        "C6": {
+          "n": 3,
+          "win60": 100.0,
+          "wilson_ci": [
+            43.8,
+            100.0
+          ],
+          "median_ret60": 12.0,
+          "mean_ret60": 14.6,
+          "best_ret60": 26.4,
+          "worst_ret60": 5.4,
+          "mae_worst": -15.64,
+          "prob_under3_20d": 66.7,
+          "mae_day_median": 5.0,
+          "pct_neg_ret10": 0.0,
+          "pct_neg_ret20": 0.0,
+          "failures": [],
+          "year_counts": {
+            "2022": 1,
+            "2024": 1,
+            "2026": 1
+          },
+          "breakeven_rate": 100.0,
+          "mae_p10": -13.3,
+          "mae_p25": -9.78,
+          "mae_p50": -3.92,
+          "mae_p75": -2.55,
+          "mae_p90": -1.73,
+          "prob_mae_gt5": 33.3,
+          "prob_mae_gt10": 33.3,
+          "excess_vs_baseline_pp": 48.9,
+          "excess_vs_deep_pp": 43.4
+        }
+      },
+      "deep_random_baseline": {
+        "n": 122,
+        "win60": 56.6,
+        "wilson_ci": [
+          47.7,
+          65.0
+        ],
+        "median_ret60": 3.4,
+        "median_mae": -8.16
+      },
+      "excess_vs_baseline_pp": 48.9,
+      "excess_vs_deep_pp": 43.4,
+      "primary_combo": "C3"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+name: 盘前午盘盘后综合分析
+scene_id: session_analysis
+description: "按声明式时段配方编排现有 Skill，产出盘前/午盘/盘后可追溯 Markdown 报告 + PNG 卡片；随 Skill 更新自动迭代（作者 Warwick）"
+# 说明：本场景的真实执行逻辑在 SKILL.md（Agent 按时段配方逐个调用上游 Skill）。
+# 下方 steps 列出配方覆盖的 Skill 槽位，供编排引擎发现与依赖解析；
+# 具体「哪个时段跑哪些、什么口径、什么依赖」以 recipes/session_map.yaml 为准。
+steps:
+  - skill_id: overnight_review
+    parallel_group: 0
+    params: {}
+  - skill_id: policy_interpret
+    parallel_group: 0
+    params: {}
+  - skill_id: sentiment_risk_warning
+    parallel_group: 0
+    params: {}
+  - skill_id: market_hotspot
+    parallel_group: 0
+    params: {}
+  - skill_id: industry_brief
+    parallel_group: 0
+    params: {}
+  - skill_id: market_daily_review
+    parallel_group: 0
+    params: {}
+  - skill_id: a_share_bottom_monitor
+    parallel_group: 0
+    params: {}
+  - skill_id: racing_quant_pick
+    parallel_group: 0
+    params: {}
+  - skill_id: stock_comparative_analysis
+    parallel_group: 0
+    params: {}

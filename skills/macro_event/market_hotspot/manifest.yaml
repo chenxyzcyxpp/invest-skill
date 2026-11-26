@@ -1,0 +1,27 @@
+skill_id: market_hotspot
+skill_name: 股票市场热点解读
+category: macro_event
+author: 周周
+version: "1.0.0"
+description: "识别并解读当日/阶段板块、题材热点与资金主线"
+runtime: llm_prompt          # 提示词驱动 LLM 技能，SKILL.md + references/output-template.md
+calls_gateway: false         # 取数走 AkShare 直连 + WebSearch/WebFetch，不经 ctx.gateway
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: query
+    type: string
+    required: true
+    description: "调用参数，具体字段随 Skill 业务而定"
+# 标准输出契约
+output:
+  - name: data
+    type: object
+    description: "Skill 返回的核心结果（热点/解读/资金/情绪/操作建议，含溯源角标）"
+  - name: data_source
+    type: string
+    description: "实际数据源标记（akshare + 公开网站检索，非网关单一来源）"
+
+# 注：本 Skill 为提示词驱动的 LLM 技能规格（同类见 policy_interpret）。
+# 其取数依赖 AkShare 开源库与各公开网站检索（WebSearch/WebFetch），
+# 不在可降级数据网关（Tushare/Akshare/腾讯）覆盖范围内，故 calls_gateway=false。
+# 纳入编排引擎前需包装为 BaseSkill + LLM 运行时（详见政策解读 Skill 的适配说明）。

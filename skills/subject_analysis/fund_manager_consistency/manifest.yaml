@@ -1,0 +1,19 @@
+skill_id: fund_manager_consistency
+skill_name: 基金经理观点&持仓一致性分析
+category: subject_analysis
+description: "分析基金经理观点与持仓的一致性"
+calls_gateway: true          # 统一经可降级数据网关取数
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: query
+    type: string
+    required: true
+    description: "调用参数，具体字段随 Skill 业务而定"
+# 标准输出契约
+output:
+  - name: data
+    type: object
+    description: "Skill 返回的核心结果"
+  - name: data_source
+    type: string
+    description: "实际数据源标记（tushare/akshare/tencent）"

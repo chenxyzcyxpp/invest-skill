@@ -1,0 +1,45 @@
+skill_id: policy_interpret
+skill_name: 政策解读
+category: macro_event
+author: 周周
+version: 1.1.0
+spec: SKILL.md
+description: "对宏观政策进行解读与影响分析，输出政策原文及结构化分析（背景/核心内容/影响范围/受益行业等），可溯源"
+
+# 重要：本 Skill 是「提示词驱动的 LLM 技能」（见 SKILL.md），其执行依赖
+# WebSearch / WebFetch 抓取公开政府网站与权威媒体，不经由本项目可降级数据网关
+# （Tushare / Akshare / 腾讯财经），需 LLM 运行时支撑，尚未包装为 BaseSkill。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md 中定义。
+calls_gateway: false
+runtime: llm_prompt          # llm_prompt | base_skill（当前为前者，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: keyWord
+    type: string
+    required: true
+    description: "行业或政策主题，如 AI、半导体、新能源、货币政策"
+  - name: dateRange
+    type: string
+    required: false
+    description: "日期范围，未指定默认近一月，格式 YYYY-MM-DD"
+  - name: policyType
+    type: string
+    required: false
+    description: "宏观/行业/区域/财政/货币/环保/产业"
+  - name: region
+    type: string
+    required: false
+    description: "全国性/省级/市级"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "files/report/{主题}_政策解读_{YYYYMMDD}.md"
+  - name: report_html
+    type: file
+    description: "files/report/{主题}_政策解读_{YYYYMMDD}.html（带溯源角标双向跳转）"
+  - name: data
+    type: object
+    description: "结构化政策 JSON：policyID/title/publishDate/analysisResults/benefitIndustries/affectedCompanies"

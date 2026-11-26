@@ -1,0 +1,46 @@
+skill_id: industry_brief
+skill_name: 行业速报
+category: macro_event
+author: Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "以申万一级行业为口径，输出行业强弱排名、资金流向、事件速递与可解释信号（R01-R06），生成每日行业速报"
+
+# 重要：本 Skill 是「脚本驱动型」（SKILL.md 提示词 + scripts/ 下可运行 Python）。
+# 其取数直连 Tushare / Akshare / 腾讯财经网页源（三级可降级，见 references/data-sources.md），
+# 不经由本项目可降级数据网关（ctx.gateway：Tushare > Akshare > 腾讯财经）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + scripts/industry_flash.py，
+# 需 LLM + 本地数据源（tushare/akshare/腾讯）支撑，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: script_based          # script_based | llm_prompt | base_skill（当前为 script_based，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: trade_date
+    type: string
+    required: false
+    description: "速报基准交易日，格式 YYYY-MM-DD；未指定默认最近交易日"
+  - name: industries
+    type: list
+    required: false
+    description: "限定行业范围（申万一级行业名或代码）；未指定则覆盖全部 31 个申万一级行业"
+  - name: focus
+    type: string
+    required: false
+    description: "关注重点：strength（强弱）/ fund（资金）/ event（事件）/ all（全部，默认）"
+  - name: top_n
+    type: int
+    required: false
+    description: "强弱榜 / 资金榜展示条数，默认 5"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "files/report/{trade_date}_行业速报.md（六段式速报）"
+  - name: report_html
+    type: file
+    description: "files/report/{trade_date}_行业速报.html（可读报告）"
+  - name: data
+    type: object
+    description: "结构化结果：强弱榜、资金流、事件、信号(R01-R06)、降级标记 degraded/degrade_trace"

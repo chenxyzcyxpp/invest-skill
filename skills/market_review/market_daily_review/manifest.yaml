@@ -1,0 +1,75 @@
+skill_id: market_daily_review
+skill_name: 股市每日收评
+category: market_review
+author: Warwick
+version: "1.1.4"
+spec: SKILL.md
+description: "基于开源金融数据源（Tushare/Akshare/腾讯财经/东方财富，四级可降级），自动生成 A 股/港股每个交易日的收盘点评报告（大盘指数、涨跌统计、板块表现、个股异动、资金流向、龙虎榜、重要资讯、技术面、盘面综述），覆盖全部市场或单市场，所有数据带溯源标记与降级标记；数据源失败时如实标注，严禁编造"
+
+# 形态说明：本 Skill 为「脚本驱动型」（SKILL.md 提示词 + scripts/market_review.py 可运行 Python）。
+# 其取数直连开源数据源（Tushare > Akshare > 腾讯财经/东方财富网页兜底），经 scripts 内部四级
+# 可降级网关，不经由本项目可降级数据网关（ctx.gateway：Tushare > Akshare > 腾讯财经）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + scripts/market_review.py，
+# 需本机可访问开源数据源支撑，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: script_based         # script_based | llm_prompt | base_skill（当前为 script_based）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: trade_date
+    type: string
+    required: false
+    description: "速报基准交易日，格式 YYYY-MM-DD；未指定默认最近交易日"
+  - name: market
+    type: string
+    required: false
+    description: "覆盖市场：A股 / 港股 / 全部（默认全部）"
+  - name: days
+    type: int
+    required: false
+    description: "多日范围（最近 N 天）；未指定默认单日"
+  - name: top_n
+    type: int
+    required: false
+    description: "板块/个股榜单展示条数，默认 10"
+  - name: output_format
+    type: string
+    required: false
+    description: "输出格式：markdown / html / both / json（默认 both）"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "files/report/{trade_date}_股市每日收评.md（十段式收评）"
+  - name: report_html
+    type: file
+    description: "files/report/{trade_date}_股市每日收评.html（可读报告）"
+  - name: data
+    type: object
+    description: "结构化结果：指数/涨跌统计/板块/个股异动/资金流/龙虎榜/资讯/技术面/综述、降级标记 degraded/degrade_trace"
+
+# 数据采集可降级方案（契约层声明；执行细则见 references/data-sources.md）
+data_sources:
+  - level: 1
+    name: Tushare
+    role: 优先源
+    requires: "TUSHARE_TOKEN 环境变量"
+    coverage: "指数(A股/港股)、申万一级行业、资金流(主力净流入+沪深港通)、龙虎榜、技术面；免费版不含涨跌统计/个股异动（该维度降级 Akshare）"
+  - level: 2
+    name: Akshare
+    role: 开源主源
+    requires: "pip install akshare"
+    coverage: "指数(sina/em)/涨跌统计/板块(同花顺)/个股异动/资金流/龙虎榜/技术面"
+  - level: 3
+    name: 腾讯财经 / 东方财富 Push API
+    role: 网页兜底
+    requires: "可访问公开网页"
+    coverage: "指数实时行情字段（其他维度无网页兜底，如实标注缺失）"
+  - level: 4
+    name: 演示数据
+    role: 管线校验 / 离线预览
+    requires: "--demo"
+    coverage: "内置样例，仅用于验证流程，不参与真实生产"
+degradation_rule: "Tushare → Akshare → 腾讯财经/东方财富网页兜底；核心行情(指数/板块)全失败则报错退出(MKT_REVIEW_001)，不伪造；龙虎榜/资讯缺口标注缺失"
+no_fabrication: true

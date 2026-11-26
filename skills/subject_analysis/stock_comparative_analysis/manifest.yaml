@@ -1,0 +1,51 @@
+skill_id: stock_comparative_analysis
+skill_name: 股票对比分析
+category: subject_analysis
+author: 周周
+version: 1.1.0
+spec: SKILL.md
+description: "对 2-5 只股票（含 A 股及 A+H 混合）生成五维深度对比分析报告（Markdown + HTML/PDF），覆盖公司简介、基本面、技术面、资金面、消息面五大章节，所有数据可溯源。"
+
+# 重要：本 Skill 是「提示词驱动型」（SKILL.md + references/ 报告模板与写作规范）。
+# 其取数直连 AkShare 开源库 + WebSearch / WebFetch（公开网站/交易所/财经媒体），
+# 不经由本项目可降级数据网关（ctx.gateway）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + LLM 取数，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: llm_prompt          # script_based | llm_prompt | base_skill（当前为 llm_prompt，待适配）
+
+# 运行时依赖（非硬编码，按需安装）：
+#   - akshare（主数据源：量化行情/财务/资金/研报/新闻）
+#   - PDF 可选：markdown2 + weasyprint（scripts/generate_pdf.py）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: tickers
+    type: list
+    required: true
+    description: "2-5 只股票代码/名称（支持 A 股及 A+H 混合）"
+  - name: period
+    type: string
+    required: false
+    description: "技术面分析时间区间，默认近一年"
+  - name: output_format
+    type: string
+    required: false
+    description: "输出格式：md（默认）/ html / pdf"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "reports/{date}_股票对比分析_{tickers}.md"
+  - name: report_html
+    type: file
+    description: "reports/{date}_股票对比分析_{tickers}.html"
+  - name: report_pdf
+    type: file
+    description: "reports/{date}_股票对比分析_{tickers}.pdf（可选，依赖 markdown2 + weasyprint）"
+  - name: data
+    type: object
+    description: "结构化结果：五维度对比、统一报告期、币种标注、降级标记"
+  - name: data_source
+    type: string
+    description: "实际数据源标记（akshare/websearch/webfetch）"

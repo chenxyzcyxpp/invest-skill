@@ -1,0 +1,43 @@
+skill_id: session_analysis
+skill_name: 盘前午盘盘后综合分析
+category: scenario
+author: Warwick
+version: 1.0.0
+spec: SKILL.md
+description: "声明式时段编排场景：按 recipes/session_map.yaml 把现有 Skill 编排成盘前(6步)/午盘(实验性3步)/盘后(7步)综合分析，产出可追溯 Markdown 报告 + 可分享 PNG 卡片；采纳投研作业流程 SOP 的时点纪律与失败隔离实战，随每次 Skill 更新低成本迭代。"
+
+runtime: orchestration        # orchestration（Agent 驱动编排，非单一 BaseSkill）
+layer: application            # 应用层场景
+calls_gateway: false          # 不直连网关；由上游各 Skill 自行取数
+
+# 取代关系：直接取代旧三空壳场景 pre_market / intraday / closing
+replaces: [pre_market, intraday, closing]
+
+# 时段配方（可迭代核心）
+recipes:
+  session_map: recipes/session_map.yaml
+  report_template: recipes/report_template.md
+
+# 产出形态
+output:
+  - name: report_md
+    type: file
+    description: "按时段配方组织的综合 Markdown 报告（每节带来源与 data_as_of，末尾数据缺口+免责）"
+  - name: cards_png
+    type: file
+    description: "NoviceCard 组合长图（复用 presentation/scripts/render_cards.py --png，820px 宽）"
+
+# 依赖的呈现出口
+presentation_layer: presentation/
+
+# 上游 Skill 槽位（配方引用，执行时读各自最新 SKILL.md）
+upstream_skills:
+  - overnight_review
+  - policy_interpret
+  - sentiment_risk_warning
+  - market_hotspot
+  - industry_brief
+  - market_daily_review
+  - a_share_bottom_monitor
+  - racing_quant_pick
+  - stock_comparative_analysis

@@ -1,0 +1,53 @@
+skill_id: invest_novice_cards
+skill_name: 小白卡可视化输出层
+layer: output            # 横切输出层，与 skills/base/ 平行；不是 15 个分析 Skill 之一，不计入 Skill 总数
+author: 刘宇恒
+version: 2.0.0
+spec: SKILL.md
+description: "invest-skill 全库的可视化输出翻译层：把上游 15 个分析 Skill 的结构化报告，翻译成普通用户一眼看懂的小白卡片（人话话术 + 固定视觉 + 合规红线），以 PNG 图片交付到聊天宿主。纯翻译不新增分析、数字逐字段照抄。v2 新增场景触发协议、单卡纪律、data_as_of 数据新鲜度。"
+
+# 本层不取数、不分析，只做呈现翻译；不经 ctx.gateway。
+# 输入是上游 Skill 已产出的报告字段，由宿主 Agent 或定时管线组装成 NoviceCard JSON。
+calls_gateway: false
+runtime: llm_prompt      # 主逻辑在 SKILL.md（话术表 + 契约）；scripts/ 提供确定性渲染
+
+# 覆盖的上游 Skill（15 个已入库；a_share_bottom_monitor 走本层信号卡口径）
+covers:
+  - policy_interpret
+  - policy_bottom_monitor
+  - sentiment_risk_warning
+  - macro_analysis
+  - market_hotspot
+  - industry_brief
+  - concept_chain_analysis
+  - market_daily_review
+  - overnight_review
+  - stock_5d_deep_analysis
+  - stock_comparative_analysis
+  - value_investing
+  - racing_quant_pick
+  - aggressive_growth_strategy
+  - a_share_bottom_monitor
+
+# 标准输入契约：上游报告字段组装成的 NoviceCard JSON（schema invest-novice-card/1）
+input:
+  - name: cards_json
+    type: file
+    required: true
+    description: "NoviceCard JSON 数组/单对象，见 SKILL.md 第 2 节契约（含 data_as_of）"
+  - name: data_as_of
+    type: string
+    required: true
+    description: "数据实际截至时间，用于时效判定；超龄不出卡"
+
+# 标准输出契约
+output:
+  - name: cards_html
+    type: file
+    description: "自包含 HTML（交互版，含 details 折叠证据）"
+  - name: cards_png
+    type: file
+    description: "整页 PNG（聊天宿主最终交付形态，820px 宽竖版）"
+  - name: check_result
+    type: object
+    description: "--check 数字一致性校验结果（0 missing 才通过）"

@@ -1,0 +1,67 @@
+skill_id: a_share_bottom_monitor
+skill_name: A股底部信号监控
+category: macro_event
+author: Warwick
+version: 1.4.1              # 资产包版本；signal_map.json 统计口径为 v1.1；v1.2 决策层扩展、v1.3 输出呈现优化、v1.4 模式C 适用范围守卫、v1.4.1 证伪落点表增列与输出防回流（均非统计重跑）
+spec: SKILL.md
+description: "对主要指数（上证/深证成指/创业板指/中证2000）进行抄底位置监控：基于2014-2026十二年全量回测的固化信号地图，判断各指数当前是否满足抄底条件、满足到几档；支持每隔约180天自动重跑全部统计、比对结论变化、修订信号地图并记录更新历史；并在组合信号触发的下跌过程中，以「状态 + 路径 + 执行」三层输出路径风险、双基准超额、8 问决策检查表与唯一动作结论。v1.2 决策层扩展不改动既有统计口径与 signal_map 结论；v1.4 起模式C 仅在组合信号已触发时输出 8 问与动作结论，未触发时输出「本轮不适用」简报；v1.4.1 起第七节证伪落点表增列历史浮亏中位数／历史最深浮亏供风险预算，并由 check_integrity.py 自动拦截内部纪律文案回流到输出。"
+
+# 重要：本 Skill 是「脚本驱动型」（SKILL.md 提示词 + scripts/ 下可运行 Python）。
+# 其取数直连 Tushare Pro（daily / index_dailybasic，通过环境变量 TUSHARE_TOKEN），
+# 不经由本项目可降级数据网关（ctx.gateway：Tushare > Akshare > 腾讯财经）。
+# 当前 skill.py 仅为占位骨架，真实执行逻辑在 SKILL.md + scripts/，需 LLM + Tushare
+# 支撑，尚未包装为 BaseSkill。
+calls_gateway: false
+runtime: script_based          # script_based | llm_prompt | base_skill（当前为 script_based，待适配）
+
+# 标准输入契约（由调度引擎按此校验/透传）
+input:
+  - name: mode
+    type: string
+    required: false
+    description: "运行模式：monitor（模式A 抄底监控，按需触发）/ recompute（模式B 半年度重跑自更新）/ decision（模式C 日常下跌决策）"
+  - name: codes
+    type: string
+    required: false
+    description: "监控/重跑的指数代码，逗号分隔；默认四指数 000001.SH,399001.SZ,399006.SZ,932000.CSI"
+  - name: tushare_token
+    type: string
+    required: false
+    description: "Tushare Pro token（也可走环境变量 TUSHARE_TOKEN）；缺失时仅用 data/ 内基线数据并明确告知"
+  - name: out
+    type: string
+    required: false
+    description: "监控报告输出路径（monitor.py --out），默认输出到终端；v1.3 起输出为成品报告（结论前置、元信息表格化、术语人读化、免责收敛文末）"
+  - name: cost
+    type: number
+    required: false
+    description: "模式C：用户实际成本价，用于计算认错线；缺失则输出「未提供，不计算」，不锚定指数点位"
+  - name: risk_budget
+    type: number
+    required: false
+    description: "模式C：组合层面可承受单笔回撤百分数 R，用于计算防尾部仓位上限 R÷|mae_worst|"
+  - name: inputs
+    type: string
+    required: false
+    description: "模式C：F/G/H 外部输入文件（JSON 或 Markdown 键值）路径；字段需带 as_of 与 source，缺失逐项标注「未提供，不参与判定」"
+
+# 标准输出契约
+output:
+  - name: report_md
+    type: file
+    description: "monitor.py 生成的模式A 监控报告：各指数当前7项指标、信号比对、判断（具备/不具备/观察）、操作纪律、买点执行、路径风险、证伪条件、外部输入、风险提示；含数据截止日、PE 数据截止日与 signal_map / path_map 版本号"
+  - name: data
+    type: object
+    description: "结构化结果：各指数当前指标、信号满足情况（历史胜率/样本量）、判断档位、本轮 episode 落点、数据截止日、信号地图版本号"
+  - name: decision_md
+    type: string
+    description: "模式C 由 decision.py 输出的 8 问检查表 + 唯一动作结论 + 风险预算 + F/G/H 外部输入标注"
+  - name: path_map
+    type: file
+    description: "references/path_map.json：独立于 signal_map.json 的机器可读路径分布（MAE 分位 / Wilson 区间 / 失败案例 / 双基准超额）"
+  - name: decision_log
+    type: file
+    description: "references/decision-log.md：减仓/认错动作的 append-only 决策日志（只增不改，同一交易日不重复追加）"
+  - name: updates_history
+    type: file
+    description: "references/history-updates.md：模式B自更新台账（只增不改，顶部最新）；v1.2 决策层扩展条目不重置 180 天过期计时"

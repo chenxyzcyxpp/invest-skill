@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>隔夜外围市场复盘</title>
+<style>
+:root{--paper:#f6f8fb;--surface:#fff;--ink:#172033;--muted:#667085;--rule:#d8e0ec;--blue:#174ea6;--blue2:#103873;--blueSoft:#eaf1fb;--red:#d92d20;--green:#16865c;--amber:#b54708}
+*{box-sizing:border-box}html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.72}main{width:min(1120px,calc(100% - 32px));margin:24px auto 56px;background:var(--surface);padding:clamp(20px,4vw,52px);box-shadow:0 10px 36px rgba(16,56,115,.08)}header{border-top:5px solid var(--blue);border-bottom:1px solid var(--rule);padding:24px 0 20px}h1,h2,h3,h4{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;color:var(--blue2);overflow-wrap:anywhere;font-weight:800}h1{font-size:34px;margin:0 0 14px}h2{font-size:24px;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--blue)}h3{font-size:18px;margin:24px 0 12px}h4{font-size:16px;margin:18px 0 10px}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 24px;color:var(--muted);font-size:12px}.summary,.five-card,.analysis-card,.event-card{margin:16px 0;padding:16px 18px;border-radius:7px}.five-card{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--amber)}.five-card.neg{border-left-color:var(--red)}.five-card.pos{border-left-color:var(--green)}.five-card .ft-head{font-weight:700;color:var(--amber);margin:0 0 10px;font-size:15px}.five-card.neg .ft-head{color:var(--red)}.five-card.pos .ft-head{color:var(--green)}.five-card p{margin:0 0 7px}.five-card p:last-child{margin-bottom:0}.analysis-card{background:#f8fbff;border-left:4px solid var(--blue)}.event-card{background:#fff9f2;border-left:4px solid var(--amber)}.tag{display:inline-block;padding:2px 8px;margin-right:6px;border-radius:999px;font-size:12px;font-weight:650;background:var(--blueSoft);color:var(--blue2)}.tag.pos{background:#eaf7f1;color:var(--green)}.tag.neg{background:#fff0ef;color:var(--red)}.tag.warn{background:#fff4e8;color:var(--amber)}p{margin:0 0 14px}strong{color:var(--blue2)}.state-line{margin:14px 0 4px;padding:12px 16px;background:#eef6ff;border-left:4px solid var(--blue);border-radius:6px;font-size:14px}.callout{background:var(--blueSoft);border-left:4px solid var(--blue);padding:12px 16px;border-radius:6px;margin:14px 0;font-size:13.5px}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;background:#fff}th,td{border:1px solid var(--rule);padding:7px 9px;text-align:left;vertical-align:top}th{background:#103873;color:#fff;font-weight:650}tr:nth-child(even) td{background:#f5f8fc}.pos{color:var(--red);font-weight:650}.neg{color:var(--green);font-weight:650}.chart-row{display:flex;flex-wrap:wrap;gap:2%;align-items:flex-start}.chart-row>*{flex:1 1 48%;min-width:280px}.chart-block{margin:18px 0}.source{color:var(--muted);font-size:11.5px;margin-top:6px;border-top:1px dashed var(--rule);padding-top:6px}footer{margin-top:36px;border-top:2px solid var(--blue2);padding-top:18px}h3{color:var(--blue2)}
+@media(max-width:768px){main{width:100%;margin:0;padding:18px 12px;box-shadow:none}.meta{grid-template-columns:1fr}table{font-size:11px}th,td{padding:5px;overflow-wrap:anywhere}}
+</style>
+</head>
+<body><main>
+<header><h1>{{REPORT_TITLE}}</h1><div class="meta"><span>报告日期：{{REPORT_DATE}}</span><span>生成时间：{{GENERATED_AT_BJT}}</span><span>市场交易日：{{MARKET_DATES}}</span><span>数据截止：{{DATA_CUTOFF}}</span></div></header>
+
+<!-- PORTABILITY: all chart placeholders must resolve to inline SVG or data: URI images; local relative paths are forbidden in the final HTML. -->
+
+<section><h2>全球行情速览</h2><h3>美国市场</h3>{{US_MARKET_TABLE}}<p class="source">{{US_SOURCES}}</p><h3>欧洲市场</h3>{{EUROPE_MARKET_TABLE}}<p class="source">{{EU_SOURCES}}</p><h3>港股与中概</h3>{{HK_CHINA_ASSET_TABLE}}<p class="source">{{HK_SOURCES}}</p><h3>亚太及新兴市场</h3>{{ASIA_EMERGING_MARKET_TABLE}}<p class="source">{{ASIA_SOURCES}}</p><h3>股债汇商品</h3>{{CROSS_ASSET_TABLE}}<p class="source">{{XASSET_SOURCES}}</p></section>
+
+<section class="summary"><h2>今日五件事（Here's what's moving markets）</h2><p style="font-size:12.5px;color:var(--muted)">决策层，按优先级排序：利率/通胀总开关 &gt; 全球产业定价 &gt; 地缘/商品 &gt; 国内重大政策 &gt; 其他。每件事固定“事实 → 含义（本报告观点）→ A股传导 → 验证/失效”四句式。</p>{{FIVE_THINGS}}<div class="state-line"><strong>今日市场状态：</strong>{{MARKET_STATE}}</div><p class="source">{{SECTION_2_SOURCES}}</p></section>
+
+<section><h2>一张图看隔夜</h2><div class="chart-row">{{ASSET_PERFORMANCE_CHART}}{{ASHARE_VERIFY_CHART}}</div><div class="chart-block">{{GLOBAL_CAUSAL_SVG}}</div><div class="callout">重大隔夜事件 → 核心定价变量 → 中国市场主线；第一段到第二段严格一对一，第二段到第三段多对多，不代表必然涨跌。</div>{{CAUSAL_SUMMARY}}<p class="source">{{SECTION_3_SOURCES}}</p></section>
+
+<section><h2>主线与分歧</h2>
+<h3>主线：在交易什么、交易到什么位置、历史怎么走</h3>
+<p style="font-size:12.5px;color:var(--muted)">主线固定回答三问：现在交易什么叙事 / 已经交易到什么位置（定价·拥挤·阶段）/ 历史类似交易后续怎么走（可比参照，非预测）；每条主线末尾给「对A股潜在影响」，章节末尾给「主线对A股的综合影响」小结。</p>
+{{MAIN_THREAD_SECTION}}
+<h3>分歧：博弈战场与认知-情绪冲突</h3>
+<p style="font-size:12.5px;color:var(--muted)">分歧固定回答两问：博弈最剧烈环节（战场）/ 认知差（已知真相 vs 已定价）/ 情绪差（情绪 vs 基本面）/ 冲突点（谁先收敛）；每条分歧末尾给「对A股潜在影响」，章节末尾给「分歧对A股的潜在影响与应对」小结。</p>
+{{DIVERGENCE_SECTION}}
+<p class="source">{{SECTION_4_SOURCES}}</p></section>
+
+<!-- 第六章：决策时间线（常驻） -->
+<section class="timeline-sec"><h2>决策时间线（常驻）</h2><p style="font-size:12.5px;color:var(--muted)">常驻锚定未来24h关键节点 + 可折叠未来一周；所有情景标记为推演。</p>{{DECISION_TIMELINE_SECTION}}<p class="source">{{SECTION_5_SOURCES}}</p></section>
+
+<section><h2>数据口径、来源与限制</h2><h3>口径与数据限制</h3>{{METHODOLOGY_SCOPE_LIMITS}}<h3>数据来源</h3>{{CONSOLIDATED_SOURCES}}</section>
+</main></body></html>
